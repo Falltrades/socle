@@ -96,3 +96,8 @@ global:
 
 prometheus:
   install: false
+
+postgresql:
+  primary:
+    podAnnotations:
+      pre.hook.backup.velero.io/command: '["/bin/bash", "-c", "pg_dump -Fc  -U dso -d gitlabhq_production  > /bitnami/postgresql/data/app.dump"]'

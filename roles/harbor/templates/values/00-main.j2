@@ -80,6 +80,8 @@ database:
     serviceAccountName: harbor-sa
     image:
       repository: docker.io/goharbor/harbor-db
+  podAnnotations:
+    pre.hook.backup.velero.io/command: '["/bin/bash", "-c", "pg_dump -Fc  -U dso -d registry  > /var/lib/postgresql/data/app.dump"]'
 redis:
   internal:
     serviceAccountName: harbor-sa
