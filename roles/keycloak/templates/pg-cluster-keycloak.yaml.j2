@@ -15,7 +15,13 @@ spec:
 
   # Parameters and pg_hba configuration will be append
   # to the default ones to make the cluster work
+{% if cluster_offline is defined and cluster_offline == "true" %}                                                                       
+  imageName: "{{ private_image_repository }}/cloudnative-pg/postgresql:16.1"
+{% endif %}
   postgresql:
+{% if cluster_offline is defined and cluster_offline == "true" %}                                                                       
+    image: "{{ private_image_repository }}/cloudnative-pg/postgresql:16.1"
+{% endif %}
     parameters:
       max_worker_processes: "60"
     pg_hba:

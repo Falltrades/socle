@@ -1,0 +1,6 @@
+{% if cluster_offline is defined and cluster_offline == "true" %}                                                                       
+global:
+  image:
+    registry: "{{ private_image_repository }}"
+{% endif %}
+

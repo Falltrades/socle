@@ -17,6 +17,7 @@ spec:
     path: {{ api_metrics_path }}
     port: {{ api_metrics_port_name }}
     scheme: http
+{% if not cluster_offline %}
   - interval: 30s
     path: {{ web_metrics_path }}
     scheme: http
@@ -25,6 +26,7 @@ spec:
     path: {{ ce_metrics_path }}
     scheme: http
     targetPort: {{ ce_metrics_port_name }}
+{% endif %}
   selector:
     matchLabels:
       app: sonarqube

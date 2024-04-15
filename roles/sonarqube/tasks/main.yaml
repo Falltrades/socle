@@ -163,6 +163,9 @@
     - scan
     - provisioning
 
+- include_vars: metrics.yaml 
+  when: not cluster_offline 
+
 - name: Create metrics resources
   when: dsc.global.metrics.enabled
   block:

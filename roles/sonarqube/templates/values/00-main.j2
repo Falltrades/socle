@@ -1,17 +1,26 @@
 
+{% if not cluster_k8s %}
 OpenShift:
   enabled: true
+{% endif %}
 
 image:
   pullPolicy: IfNotPresent
+{% if not cluster_offline %}
   repository: docker.io/sonarqube
+{% endif %}
+{% if cluster_offline is defined and cluster_offline == "true" %}                                                                       
+  repository: "{{ private_image_repository }}/sonarqube"
+{% endif %}
 
+{% if not cluster_k8s %}
 securityContext:
   fsGroup: null
 
 containerSecurityContext:
   runAsUser: null
   runAsGroup: null
+{% endif %}
 
 sonarWebContext: /
 
@@ -23,7 +32,9 @@ ingress:
       pathType: Prefix
       path: "/"
   annotations:
+{% if not cluster_k8s %}
     route.openshift.io/termination: "edge"
+{% endif %}
 {% for key, val in dsc.ingress.annotations.items() %}
     {{ key }}: "{{ val }}"
 {% endfor %}
@@ -33,10 +44,12 @@ ingress:
   labels:
     app: "sonar"
 
+{% if not cluster_k8s %}
 initContainers:
   securityContext:
     runAsUser: null
     runAsGroup: null
+{% endif %}
 
 initSysctl:
   enabled: false
@@ -45,7 +58,12 @@ initFs:
   enabled: false
 
 prometheusExporter:
+{% if not cluster_offline %}
   enabled: {{ dsc.global.metrics.enabled }}
+{% endif %}
+{% if cluster_offline is defined and cluster_offline == "true" %}                                                                       
+  enabled: false 
+{% endif %}
 
 # We do not enable podMonitor here,
 # as helm might complain about an already existing
@@ -55,6 +73,7 @@ prometheusMonitoring:
   podMonitor:
     enabled: false
 
+{% if not cluster_offline %}
 plugins:
   install:
   - https://github.com/vaulttec/sonar-auth-oidc/releases/download/v2.1.1/sonar-auth-oidc-plugin-2.1.1.jar
@@ -62,6 +81,7 @@ plugins:
 
 jvmOpts: "-javaagent:/opt/sonarqube/extensions/plugins/sonarqube-community-branch-plugin-1.19.0.jar=web"
 jvmCeOpts: "-javaagent:/opt/sonarqube/extensions/plugins/sonarqube-community-branch-plugin-1.19.0.jar=ce"
+{% endif %}
 
 ## a monitoring passcode needs to be defined in order to get reasonable probe results
 # not setting the monitoring passcode will result in a deployment that will never be ready
@@ -106,7 +126,14 @@ account:
 #  adminPassword: admin
 #  currentAdminPassword: admin
   adminPasswordSecretName: "sonarqube"
+{% if not cluster_k8s %}
   securityContext: {}
+{% endif %}
+{% if cluster_k8s is defined and cluster_k8s == "true" %}
+  securityContext:
+    runAsUser: 101
+#   runAsGroup: 999
+{% endif %}
   resources:
     limits:
       cpu: 100m
@@ -114,7 +141,12 @@ account:
     requests:
       cpu: 100m
       memory: 128Mi
+{% if not cluster_offline %}
 curlContainerImage: curlimages/curl:8.2.1
+{% endif %}
+{% if cluster_offline is defined and cluster_offline == "true" %}                                                                       
+curlContainerImage: "{{ private_image_repository }}/curlimages/curl:8.2.1"
+{% endif %}
 adminJobAnnotations: {}
 
 terminationGracePeriodSeconds: 60

@@ -1,0 +1,20 @@
+{% if cluster_offline is defined and cluster_offline == "true" %}
+image:
+  repository: "{{ private_image_repository }}/cert-manager-controller"
+    
+webhook:
+  image:
+    repository: "{{ private_image_repository }}/cert-manager-webhook"
+    
+cainjector:
+  image:
+    repository: "{{ private_image_repository }}/cert-manager-cainjector"
+    
+acmesolver:
+  image:
+    repository: "{{ private_image_repository }}/cert-manager-acmesolver"
+    
+startupapicheck:
+  image:
+    repository: "{{ private_image_repository }}/cert-manager-startupapicheck"
+{% endif %}
