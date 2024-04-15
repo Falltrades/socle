@@ -55,6 +55,8 @@
     chart_version: "{{ dsc.harbor.chartVersion }}"
     release_namespace: "{{ dsc.harbor.namespace }}"
     values: "{{ harbor_values }}"
+    wait: true
+    wait_timeout: 300s
 
 - name: Update inventory
   kubernetes.core.k8s:

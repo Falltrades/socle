@@ -301,6 +301,14 @@ spec:
                             - velero
                           type: string
                       type: object
+                    platform:
+                      default: openshift
+                      description: Cluster platform only openshift and kubernetes are
+                        supported.
+                      enum:
+                        - openshift
+                        - kubernetesVanilla
+                      type: string
                     registry:
                       description: Specifies the internal registry to use.
                       type: string
@@ -309,6 +317,8 @@ spec:
                     - rootDomain
                     - environment
                     - metrics
+                    - platform
+                    - offline
                   type: object
                 grafana:
                   description: Configuration for Grafana instance.
