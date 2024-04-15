@@ -139,6 +139,9 @@ spec:
                       type: object
                       default: {}
                       x-kubernetes-preserve-unknown-fields: true
+                    privateGitlabDomain:
+                      description: Private Gitlab repository for argocd to access.
+                      type: string
                   required:
                     - admin
                   type: object
@@ -180,6 +183,10 @@ spec:
                       description: Size for postgres' pvc
                       type: string
                       default: 10Gi
+                    consoleRepoUrl:
+                      description: Console repository url.
+                      default: https://github.com/cloud-pi-native/console.git 
+                      type: string
                   type: object
                 gitlab:
                   description: Configuration for GitLab.
@@ -247,6 +254,22 @@ spec:
                       type: string
                     namespace:
                       description: The namespace for GitLab Operator.
+                      type: string
+                  type: object
+                gitlabCatalog:
+                  description: Configuration for GitLab Catalog.
+                  properties:
+                    catalogRepoUrl:
+                      description: GitLab Catalog repository url.
+                      default: https://github.com/cloud-pi-native/gitlab-ci-catalog.git
+                      type: string
+                    catalogBranchesApi:
+                      description: GitLab Catalog branches api.
+                      default: https://api.github.com/repos/cloud-pi-native/gitlab-ci-catalog/branches
+                      type: string
+                    catalogTagsApi:
+                      description: GitLab Catalog tags api.
+                      default: https://api.github.com/repos/cloud-pi-native/gitlab-ci-catalog/tags
                       type: string
                   type: object
                 gitlabRunner:
@@ -363,6 +386,11 @@ spec:
                         - openshift
                         - kubernetesVanilla
                       type: string
+                    offline:
+                      default: false
+                      description: Specifies whether the cluster have access to the 
+                        internet or not.
+                      type: boolean
                     registry:
                       description: Specifies the internal registry to use.
                       type: string
@@ -372,6 +400,7 @@ spec:
                     - environment
                     - metrics
                     - platform
+                    - offline
                   type: object
                 grafana:
                   description: Configuration for Grafana instance.
@@ -653,6 +682,12 @@ spec:
                       description: Size for postgres' pvc
                       type: string
                       default: 10Gi
+                    pluginDownloadUrl:
+                      description: Plugins download Url.
+                      type: string
+                    PrometheusJavaagentVersion:
+                      description: Prometheus javaagent version.
+                      type: string
                     values:
                       description: |
                         You can merge customs values for sonarqube, it will be merged with roles/sonarqube/tasks/main.yaml

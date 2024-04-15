@@ -107,7 +107,6 @@
 
 - name: Deploy helm
   kubernetes.core.helm:
-    force: true
     name: sonarqube
     chart_ref: sonarqube/sonarqube
     chart_version: "{{ dsc.sonarqube.chartVersion }}"
@@ -162,6 +161,54 @@
   with_items:
     - scan
     - provisioning
+
+      ##- name: Get sonarqube secret
+      ##  kubernetes.core.k8s_info:
+      ##    namespace: "{{ dsc.sonarqube.namespace }}"
+      ##    kind: Secret
+      ##    name: sonarqube
+      ##  register: sonar_admin_secret
+      ##   
+      ##- name: Set sonar admin facts
+      ##  ansible.builtin.set_fact:
+      ##    sonar_admin_user: "{{ sonar_admin_secret.resources[0].data.currentPassword | b64decode }}"
+      ##    sonar_admin_pass: "{{ sonar_admin_secret.resources[0].data.password | b64decode }}"
+      ##  no_log: true
+      ##
+      ##- name: Get admin group
+      ##  ansible.builtin.uri:
+      ##    url: "https://{{ sonar_domain }}/api/user_groups/search?q=admin"
+      ##    method: GET
+      ##    user: "{{ sonar_admin_user }}"
+      ##    password: "{{ sonar_admin_pass }}"
+      ##    force_basic_auth: true
+      ##  register: admin_group
+      ##
+      ##- name: Create admin group
+      ##  ansible.builtin.uri:
+      ##    url: "https://{{ sonar_domain }}/api/user_groups/create?name=admin&description=admin"
+      ##    method: POST
+      ##    user: "{{ sonar_admin_user }}"
+      ##    password: "{{ sonar_admin_pass }}"
+      ##    force_basic_auth: true
+      ##    status_code: [200,204]
+      ##  when: admin_group.json.groups | selectattr('name', 'equalto', 'admin') | list | length == 0
+      ##
+      ##- name: Add admin permissions to admin group
+      ##  ansible.builtin.uri:
+      ##    url: "https://{{ sonar_domain }}/api/permissions/add_group?groupName=admin&permission={{ item }}"
+      ##    method: POST
+      ##    user: "{{ sonar_admin_user }}"
+      ##    password: "{{ sonar_admin_pass }}"
+      ##    force_basic_auth: true
+      ##    status_code: [200,204]
+      ##  with_items:
+      ##    - admin
+      ##    - gateadmin
+      ##    - profileadmin
+      ##    - profileadmin
+      ##    - provisioning
+      ##    - scan
 
 - name: Create metrics resources
   when: dsc.global.metrics.enabled
