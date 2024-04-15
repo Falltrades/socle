@@ -8,6 +8,11 @@
       tags:
         - always
 
+    - name: cluster-offline
+      tags:
+        - always
+      when: dsc.global.offline
+
     - name: ca
       tags:
         - always

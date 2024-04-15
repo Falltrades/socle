@@ -1,17 +1,7 @@
 
-OpenShift:
-  enabled: true
-
 image:
   pullPolicy: IfNotPresent
   repository: docker.io/sonarqube
-
-securityContext:
-  fsGroup: null
-
-containerSecurityContext:
-  runAsUser: null
-  runAsGroup: null
 
 sonarWebContext: /
 
@@ -23,7 +13,6 @@ ingress:
       pathType: Prefix
       path: "/"
   annotations:
-    route.openshift.io/termination: "edge"
 {% for key, val in dsc.ingress.annotations.items() %}
     {{ key }}: "{{ val }}"
 {% endfor %}
@@ -33,11 +22,7 @@ ingress:
   labels:
     app: "sonar"
 
-initContainers:
-  securityContext:
-    runAsUser: null
-    runAsGroup: null
-
+# Should be kept as false even if dsc.global.platform == "kubernetes" and it may be best to work with your cluster administrator to either provide specific nodes with the proper kernel settings, or ensure they are set cluster wide : sysctl -a "name=vm.max_map_count value=262144"
 initSysctl:
   enabled: false
 
@@ -54,11 +39,6 @@ prometheusExporter:
 prometheusMonitoring:
   podMonitor:
     enabled: false
-
-plugins:
-  install:
-  - https://github.com/vaulttec/sonar-auth-oidc/releases/download/v2.1.1/sonar-auth-oidc-plugin-2.1.1.jar
-  - https://github.com/mc1arke/sonarqube-community-branch-plugin/releases/download/1.19.0/sonarqube-community-branch-plugin-1.19.0.jar
 
 jvmOpts: "-javaagent:/opt/sonarqube/extensions/plugins/sonarqube-community-branch-plugin-1.19.0.jar=web"
 jvmCeOpts: "-javaagent:/opt/sonarqube/extensions/plugins/sonarqube-community-branch-plugin-1.19.0.jar=ce"
@@ -106,7 +86,6 @@ account:
 #  adminPassword: admin
 #  currentAdminPassword: admin
   adminPasswordSecretName: "sonarqube"
-  securityContext: {}
   resources:
     limits:
       cpu: 100m

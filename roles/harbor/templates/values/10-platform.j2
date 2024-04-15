@@ -1,0 +1,7 @@
+{% if dsc.global.platform == "kubernetes" %}
+jobservice:
+  replicas: 1
+
+registry:
+  replicas: 1
+{% endif %}
