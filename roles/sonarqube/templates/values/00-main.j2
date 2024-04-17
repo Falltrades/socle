@@ -51,6 +51,7 @@ initContainers:
     runAsGroup: null
 {% endif %}
 
+# Should be kept as false even if cluster_k8s and it may be best to work with your cluster administrator to either provide specific nodes with the proper kernel settings, or ensure they are set cluster wide : sysctl -a "name=vm.max_map_count value=262144"
 initSysctl:
   enabled: false
 
