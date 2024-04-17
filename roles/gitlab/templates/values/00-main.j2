@@ -110,9 +110,7 @@ shared-secrets:
   selfsign:
     image:
       repository: "{{ private_image_repository }}/gitlab-org/build/cng/cfssl-self-sign"
-{% endif %}
 
-{% if private_image_repository is defined and private_image_repository != "" %}
 minio:
   image: "{{ private_image_repository }}/minio"
   minioMc:
