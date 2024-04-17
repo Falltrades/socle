@@ -1,8 +1,8 @@
 image:
-{% if not cluster_offline %}
+{% if private_image_repository is not defined %}
   registry: docker.io
 {% endif %}
-{% if cluster_offline is defined and cluster_offline == "true" %}                                                                       
+{% if private_image_repository is defined and private_image_repository != "" %}
   registry: "{{ private_image_repository }}"
 {% endif %}
   pullPolicy: "IfNotPresent"

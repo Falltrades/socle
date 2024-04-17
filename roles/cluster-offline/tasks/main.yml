@@ -1,0 +1,6 @@
+---
+- name: Validate private_image_repository is not empty
+  assert:
+    that:
+      - cluster_offline == "true" and private_image_repository is defined
+    fail_msg: "'private_image_repository' must be defined if 'cluster_offline' is set to 'true'"

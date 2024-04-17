@@ -217,7 +217,8 @@
 
 - name: Get Blob Stores
   ansible.builtin.uri:
-    validate_certs: "{{ dsc.exposedCA.type == 'none' }}"
+    validate_certs: true
+    #validate_certs: "{{ dsc.exposedCA.type == 'none' }}"
     force_basic_auth: true
     url: https://{{ nexus_domain }}/service/rest/v1/blobstores
     method: GET

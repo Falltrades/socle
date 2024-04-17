@@ -6,10 +6,10 @@ OpenShift:
 
 image:
   pullPolicy: IfNotPresent
-{% if not cluster_offline %}
+{% if private_image_repository is not defined %}
   repository: docker.io/sonarqube
 {% endif %}
-{% if cluster_offline is defined and cluster_offline == "true" %}                                                                       
+{% if private_image_repository is defined and private_image_repository != "" %}
   repository: "{{ private_image_repository }}/sonarqube"
 {% endif %}
 
@@ -60,8 +60,7 @@ initFs:
 prometheusExporter:
 {% if not cluster_offline %}
   enabled: {{ dsc.global.metrics.enabled }}
-{% endif %}
-{% if cluster_offline is defined and cluster_offline == "true" %}                                                                       
+{% elif cluster_offline == "true" %} # Avoid issue with inject-prometheus-exporter : Could not resolve host: repo1.maven.org
   enabled: false 
 {% endif %}
 

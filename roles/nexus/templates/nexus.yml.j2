@@ -19,23 +19,25 @@ spec:
 {% if cluster_k8s is defined and cluster_k8s == "true" %}
       initContainers:  # mkdir: cannot create directory '../sonatype-work/nexus3/log': Permission denied
         - name: volume-mount-hack
-{% if not cluster_offline %}
+{% if private_image_repository is not defined %}
           image: busybox
 {% endif %}
-{% if cluster_offline is defined and cluster_offline == "true" %}
+{% if private_image_repository is defined and private_image_repository != "" %}
           image: "{{ private_image_repository }}/busybox"
 {% endif %}
-          command: ["sh", "-c", "chown -R 200:200 /nexus-data"]
+          command: ["sh", "-c", "chown -R 200:200 /nexus-data /nexus-data-docker"]
           volumeMounts:
             - mountPath: /nexus-data
               name: nexus-data-volume
+            - mountPath: /nexus-data-docker                                     
+              name: nexus-proxycache-volume
 {% endif %}
       containers:
         - name: nexus
-{% if not cluster_offline %}
+{% if private_image_repository is not defined %}
           image: sonatype/nexus3:{{ dsc.nexus.imageTag }}
 {% endif %}
-{% if cluster_offline is defined and cluster_offline == "true" %}                                                                       
+{% if private_image_repository is defined and private_image_repository != "" %}
           image: "{{ private_image_repository }}/sonatype/nexus3:{{ dsc.nexus.imageTag }}"
 {% endif %}
           imagePullPolicy: "IfNotPresent"

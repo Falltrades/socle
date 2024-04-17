@@ -15,11 +15,11 @@ spec:
 
   # Parameters and pg_hba configuration will be append
   # to the default ones to make the cluster work
-{% if cluster_offline is defined and cluster_offline == "true" %}                                                                       
+{% if private_image_repository is defined and private_image_repository != "" %}
   imageName: "{{ private_image_repository }}/cloudnative-pg/postgresql:16.1"
 {% endif %}
   postgresql:
-{% if cluster_offline is defined and cluster_offline == "true" %}                                                                       
+{% if private_image_repository is defined and private_image_repository != "" %}
     image: "{{ private_image_repository }}/cloudnative-pg/postgresql:16.1"
 {% endif %}
     parameters:

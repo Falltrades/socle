@@ -1,4 +1,4 @@
-{% if cluster_offline is defined and cluster_offline == "true" %}
+{% if private_image_repository is defined and private_image_repository != "" %}
 image:
   repository: "{{ private_image_repository }}/cert-manager-controller"
     
