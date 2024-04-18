@@ -7,12 +7,6 @@ registry:
 nginx-ingress:
   enabled: false
 
-{% if private_image_repository is defined and private_image_repository != "" %}
-  certificates:
-    image:
-      repository: "{{ private_image_repository }}/gitlab-org/build/cng/certificates"
-{% endif %}
-
 gitlab:
   webservice:
     registry:
