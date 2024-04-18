@@ -7,6 +7,12 @@ registry:
 nginx-ingress:
   enabled: false
 
+{% if private_image_repository is defined and private_image_repository != "" %}
+  certificates:
+    image:
+      repository: "{{ private_image_repository }}/gitlab-org/build/cng/certificates"
+{% endif %}
+
 gitlab:
   webservice:
     registry:
@@ -33,12 +39,28 @@ gitlab:
       serviceMonitor:
         enabled: true
 {% endif %}
+{% if private_image_repository is defined and private_image_repository != "" %}
+    image:
+      repository: "{{ private_image_repository }}/gitlab-org/build/cng/gitaly"
+{% endif %}
+    persistence:
+      size: {{ dsc.gitlab.pvcGitalySize }} 
   gitlab-exporter:
 {% if dsc.global.metrics.enabled %}
     metrics:
       serviceMonitor:
         enabled: true
 {% endif %}
+{% if private_image_repository is defined and private_image_repository != "" %}
+    image:
+      repository: "{{ private_image_repository }}/gitlab-org/build/cng/gitlab-exporter"
+{% endif %}
+{% if private_image_repository is defined and private_image_repository != "" %}
+  gitlab-shell:
+    image:
+      repository: "{{ private_image_repository }}/gitlab-org/build/cng/gitlab-shell"
+{% endif %}
+
   kas:
     enabled: false
 {% if dsc.global.metrics.enabled %}
@@ -46,7 +68,16 @@ gitlab:
       serviceMonitor:
         enabled: true
 {% endif %}
-
+{% if private_image_repository is defined and private_image_repository != "" %}
+    image:
+      repository: "{{ private_image_repository }}/gitlab-org/build/cng/gitlab-kas"
+{% endif %}
+{% if private_image_repository is defined and private_image_repository != "" %}
+  toolbox:
+    image:
+      repository: "{{ private_image_repository }}/gitlab-org/build/cng/gitlab-toolbox-ee"
+{% endif %}
+    
 
 global:
   registry:
@@ -75,6 +106,10 @@ global:
 {% if dsc.exposedCA.type != 'none' %}
       - secret: exposed-ca
 {% endif %}
+{% if private_image_repository is defined and private_image_repository != "" %}
+    image:
+      repository: "{{ private_image_repository }}/gitlab-org/build/cng/certificates"
+{% endif %}
   hosts:
     domain: {{ dsc.global.rootDomain[1:] }}
     registry:
@@ -86,6 +121,32 @@ global:
 {% if gitlab_domain %}
     gitlab:
       name: {{ gitlab_domain }}
+{% endif %}
+{% if private_image_repository is defined and private_image_repository != "" %}
+  enterpriseImages:
+    migrations:
+      repository: "{{ private_image_repository }}/gitlab-org/build/cng/gitlab-toolbox-ee"
+    sidekiq:
+      repository: "{{ private_image_repository }}/gitlab-org/build/cng/gitlab-sidekiq-ee"
+    toolbox:
+      repository: "{{ private_image_repository }}/gitlab-org/build/cng/gitlab-toolbox-ee"
+    webservice:
+      repository: "{{ private_image_repository }}/gitlab-org/build/cng/gitlab-webservice-ee"
+    workhorse:
+      repository: "{{ private_image_repository }}/gitlab-org/build/cng/gitlab-workhorse-ee"
+    geo-logcursor:
+      repository: "{{ private_image_repository }}/gitlab-org/build/cng/gitlab-geo-logcursor"
+  communityImages:
+    migrations:
+      repository: "{{ private_image_repository }}/gitlab-org/build/cng/gitlab-toolbox-ce"
+    sidekiq:
+      repository: "{{ private_image_repository }}/gitlab-org/build/cng/gitlab-sidekiq-ce"
+    toolbox:
+      repository: "{{ private_image_repository }}/gitlab-org/build/cng/gitlab-toolbox-ce"
+    webservice:
+      repository: "{{ private_image_repository }}/gitlab-org/build/cng/gitlab-webservice-ce"
+    workhorse:
+      repository: "{{ private_image_repository }}/gitlab-org/build/cng/gitlab-workhorse-ce"
 {% endif %}
 
   appConfig:
@@ -115,10 +176,13 @@ minio:
   image: "{{ private_image_repository }}/minio"
   minioMc:
     image: "{{ private_image_repository }}/mc"
-    
-gitaly:
+
+postgresql:
   image:
-    repository: "{{ private_image_repository }}gitlab-org/build/cng/gitaly"
+    registry: "{{ private_image_repository }}"
+  metrics:
+    image:
+      registry: "{{ private_image_repository }}"
 
 redis:
   image:
