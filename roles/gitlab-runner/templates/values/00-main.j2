@@ -1,4 +1,9 @@
 
+{% if private_image_repository is defined and private_image_repository != "" %}
+image:
+  registry: "{{ private_image_repository }}"
+{% endif %}
+
 replicas: 1
 
 ## How many old ReplicaSets for this Deployment you want to retain

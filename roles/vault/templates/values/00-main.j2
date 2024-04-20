@@ -1,5 +1,7 @@
 global:
+{% if not cluster_k8s %}
   openshift: true
+{% endif %}
 {% if dsc.global.metrics.enabled %}
   serverTelemetry:
     prometheusOperator: true
@@ -10,10 +12,32 @@ injector:
     enabled: true
 {% endif %}
   image:
+{% if private_image_repository is not defined %}
     repository: docker.io/hashicorp/vault-k8s
   agentImage:
     repository: docker.io/hashicorp/vault
+{% endif %}
+{% if private_image_repository is defined and private_image_repository != "" %}
+    repository: "{{ private_image_repository }}/hashicorp/vault-k8s"
+  agentImage:
+    repository: "{{ private_image_repository }}/hashicorp/vault"
+{% endif %}
 server:
+{% if cluster_k8s is defined and cluster_k8s == "true" %}
+  statefulSet:
+    securityContext:
+      pod:
+        runAsNonRoot: true
+        runAsGroup: 1000 
+        runAsUser: 100
+        fsGroup: 1000
+      container:
+        allowPrivilegeEscalation: false
+{% endif %}
+{% if private_image_repository is defined and private_image_repository != "" %}
+  image:
+    repository: "{{ private_image_repository }}/hashicorp/vault"
+{% endif %}
   route:
     enabled: false
   ha:
@@ -46,6 +70,7 @@ server:
     enable: true
     size: 23Gi
   image:
+{% if private_image_repository is not defined %}
     repository: docker.io/hashicorp/vault
 csi:
   image:
@@ -53,6 +78,16 @@ csi:
   agent:
     image:
       repository: docker.io/hashicorp/vault
+{% endif %}
+{% if private_image_repository is defined and private_image_repository != "" %}
+    repository: "{{ private_image_repository }}/hashicorp/vault"
+csi:
+  image:
+    repository: "{{ private_image_repository }}/hashicorp/vault-csi-provider"
+  agent:
+    image:
+      repository: "{{ private_image_repository }}/hashicorp/vault"
+{% endif %}
 {% if dsc.global.metrics.enabled %}
 serverTelemetry:
   serviceMonitor:

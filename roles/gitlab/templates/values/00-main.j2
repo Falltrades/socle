@@ -11,6 +11,9 @@ gitlab:
   webservice:
     registry:
       enabled: false
+    tls:
+      enable: true
+      secretName: tls-fake
 {% if dsc.global.metrics.enabled %}
     metrics:
       serviceMonitor:
@@ -48,8 +51,6 @@ gitlab:
 {% if private_image_repository is defined and private_image_repository != "" %}
     image:
       repository: "{{ private_image_repository }}/gitlab-org/build/cng/gitlab-exporter"
-{% endif %}
-{% if private_image_repository is defined and private_image_repository != "" %}
   gitlab-shell:
     image:
       repository: "{{ private_image_repository }}/gitlab-org/build/cng/gitlab-shell"
@@ -65,8 +66,6 @@ gitlab:
 {% if private_image_repository is defined and private_image_repository != "" %}
     image:
       repository: "{{ private_image_repository }}/gitlab-org/build/cng/gitlab-kas"
-{% endif %}
-{% if private_image_repository is defined and private_image_repository != "" %}
   toolbox:
     image:
       repository: "{{ private_image_repository }}/gitlab-org/build/cng/gitlab-toolbox-ee"
