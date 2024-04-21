@@ -4,3 +4,21 @@
     that:
       - cluster_offline == "true" and private_image_repository is defined
     fail_msg: "'private_image_repository' must be defined if 'cluster_offline' is set to 'true'"
+
+- name: Validate dsc.gitlabCatalog.catalogRepoUrl is different than default
+  assert:
+    that:
+      - dsc.gitlabCatalog.catalogRepoUrl != "https://github.com/cloud-pi-native/gitlab-ci-catalog.git"
+    fail_msg: "'dsc.gitlabCatalog.catalogRepoUrl' is same as 'https://github.com/cloud-pi-native/gitlab-ci-catalog.git'"
+
+- name: Validate dsc.gitlabCatalog.catalogBranchesApi is different than default
+  assert:
+    that:
+      - dsc.gitlabCatalog.catalogBranchesApi != "https://api.github.com/repos/cloud-pi-native/gitlab-ci-catalog/branches"  
+    fail_msg: "'dsc.gitlabCatalog.catalogBranchesApi' is same as 'https://api.github.com/repos/cloud-pi-native/gitlab-ci-catalog/branches'" 
+
+- name: Validate dsc.gitlabCatalog.catalogTagsApi is different than default
+  assert:
+    that:
+      - dsc.gitlabCatalog.catalogTagsApi != "https://api.github.com/repos/cloud-pi-native/gitlab-ci-catalog/tags"  
+    fail_msg: "'dsc.gitlabCatalog.catalogTagsApi' is same as 'https://api.github.com/repos/cloud-pi-native/gitlab-ci-catalog/tags'" 

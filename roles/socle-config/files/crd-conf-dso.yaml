@@ -247,6 +247,22 @@ spec:
                       description: The namespace for GitLab Operator.
                       type: string
                   type: object
+                gitlabCatalog:
+                  description: Configuration for GitLab Catalog.
+                  properties:
+                    catalogRepoUrl:
+                      description: GitLab Catalog repository url.
+                      default: https://github.com/cloud-pi-native/gitlab-ci-catalog.git
+                      type: string
+                    catalogBranchesApi:
+                      description: GitLab Catalog branches api.
+                      default: https://api.github.com/repos/cloud-pi-native/gitlab-ci-catalog/branches
+                      type: string
+                    catalogTagsApi:
+                      description: GitLab Catalog tags api.
+                      default: https://api.github.com/repos/cloud-pi-native/gitlab-ci-catalog/tags
+                      type: string
+                  type: object
                 gitlabRunner:
                   description: Configuration for GitLab Runner.
                   properties:
@@ -600,6 +616,10 @@ spec:
                       type: string
                     chartVersion:
                       description: Hashicorp Vault helm chart version (e.g., "0.25.0").
+                      type: string
+                    pvcSize:
+                      description: "Size for Vault, default: 23Gi"
+                      default: 23Gi
                       type: string
                     values:
                       description: |

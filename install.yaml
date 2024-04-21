@@ -4,14 +4,14 @@
   gather_facts: false
 
   roles:
+    - name: socle-config
+      tags:
+        - always
+
     - name: cluster-offline
       tags:
         - always
       when: cluster_offline is defined
-
-    - name: socle-config
-      tags:
-        - always
 
     - name: ca
       tags:
