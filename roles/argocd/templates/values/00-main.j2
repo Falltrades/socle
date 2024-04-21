@@ -6,6 +6,18 @@ securityContext: &securityContext
   podSecurityContext:
     fsGroup: null
 
+serviceMonitor: &serviceMonitor
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      namespace: "{{ dsc.argocd.namespace }}"
+
+{% if private_image_repository is defined and private_image_repository != "" %}
+image:
+  registry: "{{ private_image_repository }}"
+{% endif %}
+
 config:
 {% if dsc.argocd.admin.enabled %}
   secret:
@@ -32,7 +44,12 @@ config:
     policy.default: role:nada
     admin.enabled: "false"
 redis:
+{% if private_image_repository is defined and private_image_repository != "" %}
+  image:
+    registry: "{{ private_image_repository }}"
+{% endif %}
   architecture: replication
+{% if not cluster_k8s %}
   master:
     podSecurityContext:
       enabled: false
@@ -43,31 +60,30 @@ redis:
       enabled: false
     containerSecurityContext:
       enabled: false
+{% endif %}
 {% if dsc.global.metrics.enabled %}
-  metrics:
-    enabled: true
-    serviceMonitor:
-      enabled: true
-      namespace: {{ dsc.argocd.namespace }}
+  <<: *serviceMonitor
+{% if not cluster_k8s %}
     podSecurityContext:
       enabled: false
     containerSecurityContext:
       enabled: false
 {% endif %}
+{% endif %}
 controller:
+{% if not cluster_k8s %}
   <<: *securityContext
+{% endif %}
   replicaCount: 3
-{% if dsc.global.metrics.enabled %}
-  metrics:
-    enabled: true
-    serviceMonitor:
-      enabled: true
-      namespace: {{ dsc.argocd.namespace }}
+{% if dsc.global.metrics.enabled and not cluster_k8s %}
+  <<: *serviceMonitor
 {% endif %}
 dex:
   enabled: false
 server:
+{% if not cluster_k8s %}
   <<: *securityContext
+{% endif %}
   replicaCount: 3
   ingress:
     ingressClassName: {{ dsc.ingress.className | default('') }}
@@ -99,37 +115,29 @@ server:
         - TaskRun
         - PipelineRun
   extraEnvVars: []
-{% if dsc.global.metrics.enabled %}
-  metrics:
-    enabled: true
-    serviceMonitor:
-      enabled: true
-      namespace: {{ dsc.argocd.namespace }}
+{% if dsc.global.metrics.enabled and not cluster_k8s %}
+  <<: *serviceMonitor
 {% endif %}
 repoServer:
+{% if not cluster_k8s %}
   <<: *securityContext
+{% endif %}
   extraEnvVars: []
   replicaCount: 3
-{% if dsc.global.metrics.enabled %}
-  metrics:
-    enabled: true
-    serviceMonitor:
-      enabled: true
-      namespace: {{ dsc.argocd.namespace }}
+{% if dsc.global.metrics.enabled and not cluster_k8s %}
+  <<: *serviceMonitor
 {% endif %}
 applicationSet:
   enabled: false
   replicaCount: 2
+{% if not cluster_k8s %}
   <<: *securityContext
+{% endif %}
   webhook:
     ingress:
       ingressClassName: {{ dsc.ingress.className | default('') }}
-{% if dsc.global.metrics.enabled %}
-  metrics:
-    enabled: true
-    serviceMonitor:
-      enabled: true
-      namespace: {{ dsc.argocd.namespace }}
+{% if dsc.global.metrics.enabled and not cluster_k8s %}
+  <<: *serviceMonitor
 {% endif %}
 notifications:
   enabled: false
@@ -137,9 +145,5 @@ notifications:
     ingress:
       ingressClassName: {{ dsc.ingress.className | default('') }}
 {% if dsc.global.metrics.enabled %}
-  metrics:
-    enabled: true
-    serviceMonitor:
-      enabled: true
-      namespace: {{ dsc.argocd.namespace }}
+  <<: *serviceMonitor
 {% endif %}
