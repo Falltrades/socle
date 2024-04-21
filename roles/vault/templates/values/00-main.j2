@@ -7,6 +7,19 @@ global:
     prometheusOperator: true
 {% endif %}
 injector:
+{% if cluster_k8s is defined and cluster_k8s == "true" %}
+  securityContext:
+    pod:
+      runAsNonRoot: true
+      runAsGroup: 1000 
+      runAsUser: 100
+      fsGroup: 1000
+    container:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - ALL
+{% endif %}
 {% if dsc.global.metrics.enabled %}
   metrics:
     enabled: true
@@ -68,7 +81,7 @@ server:
     enable: true
   dataStorage:
     enable: true
-    size: 23Gi
+    size: {{ dsc.vault.pvcSize }}
   image:
 {% if private_image_repository is not defined %}
     repository: docker.io/hashicorp/vault
