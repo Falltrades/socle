@@ -45,41 +45,91 @@ nginx:
   replicas: 2
   serviceAccountName: harbor-sa
   image:
+{% if private_image_repository is not defined %}
     repository: docker.io/goharbor/nginx-photon
+{% endif %}
+{% if private_image_repository is defined and private_image_repository != "" %}
+    repository: "{{ private_image_repository }}/goharbor/nginx-photon" 
+{% endif %}
 portal:
   replicas: 2
   serviceAccountName: harbor-sa
   image:
+{% if private_image_repository is not defined %}
     repository: docker.io/goharbor/harbor-portal
+{% endif %}
+{% if private_image_repository is defined and private_image_repository != "" %}
+    repository: "{{ private_image_repository }}/goharbor/harbor-portal" 
+{% endif %}
 core:
   replicas: 3
   serviceAccountName: harbor-sa
   image:
+{% if private_image_repository is not defined %}
     repository: docker.io/goharbor/harbor-core
+{% endif %}
+{% if private_image_repository is defined and private_image_repository != "" %}
+    repository: "{{ private_image_repository }}/goharbor/harbor-core" 
+{% endif %}
 jobservice:
+{% if not cluster_k8s %}
   replicas: 2
+{% endif %}
+{% if cluster_k8s is defined and cluster_k8s == "true" %}
+  replicas: 1
+{% endif %}
   serviceAccountName: harbor-sa
   image:
+{% if private_image_repository is not defined %}
     repository: docker.io/goharbor/harbor-jobservice
+{% endif %}
+{% if private_image_repository is defined and private_image_repository != "" %}
+    repository: "{{ private_image_repository }}/goharbor/harbor-jobservice" 
+{% endif %}
 registry:
+{% if not cluster_k8s %}
   replicas: 3
+{% endif %}
+{% if cluster_k8s is defined and cluster_k8s == "true" %}
+  replicas: 1
+{% endif %}
   serviceAccountName: harbor-sa
   registry:
     image:
+{% if private_image_repository is not defined %}
       repository: docker.io/goharbor/registry-photon
+{% endif %}
+{% if private_image_repository is defined and private_image_repository != "" %}
+      repository: "{{ private_image_repository }}/goharbor/registry-photon" 
+{% endif %}
   controller:
     image:
+{% if private_image_repository is not defined %}
       repository: docker.io/goharbor/harbor-registryctl
+{% endif %}
+{% if private_image_repository is defined and private_image_repository != "" %}
+      repository: "{{ private_image_repository }}/goharbor/harbor-registryctl" 
+{% endif %}
 trivy:
   replicas: 2
   serviceAccountName: harbor-sa
   image:
+{% if private_image_repository is not defined %}
     repository: docker.io/goharbor/trivy-adapter-photon
+{% endif %}
+{% if private_image_repository is defined and private_image_repository != "" %}
+    repository: "{{ private_image_repository }}/goharbor/trivy-adapter-photon" 
+{% endif %}
 database:
   internal:
     serviceAccountName: harbor-sa
     image:
+{% if private_image_repository is not defined %}
       repository: docker.io/goharbor/harbor-db
+{% endif %}
+{% if private_image_repository is defined and private_image_repository != "" %}
+      repository: "{{ private_image_repository }}/goharbor/harbor-db" 
+{% endif %}
 {% if dsc.global.backup.type == 'velero' %}
   podAnnotations:
     pre.hook.backup.velero.io/command: '["/bin/bash", "-c", "pg_dump -Fc  -U postgres -d registry  > /var/lib/postgresql/data/app.dump"]'
@@ -88,11 +138,21 @@ redis:
   internal:
     serviceAccountName: harbor-sa
     image:
+{% if private_image_repository is not defined %}
       repository: docker.io/goharbor/redis-photon
+{% endif %}
+{% if private_image_repository is defined and private_image_repository != "" %}
+      repository: "{{ private_image_repository }}/goharbor/redis-photon" 
+{% endif %}
 exporter:
   replicas: 1
   image:
+{% if private_image_repository is not defined %}
     repository: docker.io/goharbor/harbor-exporter
+{% endif %}
+{% if private_image_repository is defined and private_image_repository != "" %}
+    repository: "{{ private_image_repository }}/goharbor/harbor-exporter" 
+{% endif %}
 {% if dsc.global.metrics.enabled %}
 metrics:
   enabled: true
