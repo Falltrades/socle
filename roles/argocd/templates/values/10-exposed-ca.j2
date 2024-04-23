@@ -3,4 +3,8 @@ config:
   tlsCerts:
     {{ gitlab_domain }}: |
       {{ exposed_ca_pem | indent(width=6, first=False) }}
+{% if cluster_offline is defined and cluster_offline == "true" %}                                                                       
+    {{ dsc.argocd.privateGitlabDomain }}: |
+      {{ exposed_ca_pem | indent(width=6, first=False) }}
+{% endif %}
 {% endif %}

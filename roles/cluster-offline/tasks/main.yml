@@ -22,3 +22,15 @@
     that:
       - dsc.gitlabCatalog.catalogTagsApi != "https://api.github.com/repos/cloud-pi-native/gitlab-ci-catalog/tags"  
     fail_msg: "'dsc.gitlabCatalog.catalogTagsApi' is same as 'https://api.github.com/repos/cloud-pi-native/gitlab-ci-catalog/tags'" 
+
+- name: Validate dsc.console.consoleRepoUrl is different than default
+  assert:
+    that:
+      - dsc.console.consoleRepoUrl != "https://github.com/cloud-pi-native/console.git"
+    fail_msg: "'dsc.console.consoleRepoUrl' is same as 'https://github.com/cloud-pi-native/console.git'"
+
+- name: Validate dsc.argocd.privateGitlabDomain is not empty
+  assert:
+    that:
+      - dsc.argocd.privateGitlabDomain != ""
+    fail_msg: "'dsc.argocd.privateGitlabDomain' is empty" 

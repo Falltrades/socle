@@ -12,7 +12,7 @@ spec:
   project: console-pi-native
   source: 
     path: helm
-    repoURL: https://github.com/cloud-pi-native/console.git
+    repoURL: "{{ dsc.console.consoleRepoUrl }}" 
     targetRevision: v{{ dsc.console.release }}
     releaseName: console-pi
     helm:

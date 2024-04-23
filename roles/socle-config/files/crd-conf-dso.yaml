@@ -139,6 +139,10 @@ spec:
                       type: object
                       default: {}
                       x-kubernetes-preserve-unknown-fields: true
+                    privateGitlabDomain:
+                      description: Private Gitlab repository for argocd to access.
+                      default: "" 
+                      type: string
                   required:
                     - admin
                   type: object
@@ -179,6 +183,10 @@ spec:
                       type: object
                       default: {}
                       x-kubernetes-preserve-unknown-fields: true
+                    consoleRepoUrl:
+                      description: Console repository url.
+                      default: https://github.com/cloud-pi-native/console.git 
+                      type: string
                   required:
                     - dbPassword
                   type: object

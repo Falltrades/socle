@@ -5,9 +5,21 @@ ingress:
   annotations: {{ dsc.ingress.annotations }}
   labels: {{ dsc.ingress.labels }}
 
+{% if private_image_repository is defined and private_image_repository != "" %}
+server:
+  container:
+    image: "{{ private_image_repository }}/cloud-pi-native/console/server:{{ dsc.console.release }}"
+
+client:
+  container:
+    image: "{{ private_image_repository }}/cloud-pi-native/console/client:{{ dsc.console.release }}"
+{% endif %}
 
 postgres:
   container:
+{% if private_image_repository is defined and private_image_repository != "" %}
+    image: "{{ private_image_repository }}/postgres:15.3"
+{% endif %}
     db: dso-console-db
     user: dso
     pass: {{ dsc.console.dbPassword }}
