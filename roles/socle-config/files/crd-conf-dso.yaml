@@ -204,6 +204,10 @@ spec:
                     chartVersion:
                       description: GitLab chart version (e.g., "6.11.10").
                       type: string
+                    pvcGitalySize:
+                      description: Size for Gitaly persistent volume.
+                      default: 50Gi
+                      type: string
                     values:
                       description: |
                         You can merge customs values for gitlab, it will be merged with roles/gitlab/templates/gitlab-instance.yaml.j2
@@ -606,6 +610,10 @@ spec:
                       type: string
                     chartVersion:
                       description: Hashicorp Vault helm chart version (e.g., "0.25.0").
+                      type: string
+                    pvcSize:
+                      description: Size for Vault persistent volume.
+                      default: 23Gi
                       type: string
                     values:
                       description: |
