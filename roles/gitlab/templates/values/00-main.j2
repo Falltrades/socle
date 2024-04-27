@@ -38,7 +38,7 @@ gitlab:
       repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitaly"
 {% endif %}
     persistence:
-      size: {{ dsc.gitlab.pvcGitalySize }} 
+      size: {{ dsc.gitlab.pvcGitalySize }}
   gitlab-exporter:
 {% if dsc.global.metrics.enabled %}
     metrics:
