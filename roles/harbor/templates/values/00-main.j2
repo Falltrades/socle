@@ -143,6 +143,7 @@ exporter:
 {% if dsc.general.registry != "" %}
     repository: "{{ dsc.general.registry }}/goharbor/harbor-exporter" 
 {% endif %}
+  serviceAccountName: harbor-sa
 {% if dsc.global.metrics.enabled %}
 metrics:
   enabled: true
