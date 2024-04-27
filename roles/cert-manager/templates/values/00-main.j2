@@ -1,0 +1,20 @@
+{% if dsc.general.registry != "" %}
+image:
+  repository: "{{ dsc.general.registry }}/cert-manager-controller"
+
+webhook:
+  image:
+    repository: "{{ dsc.general.registry }}/cert-manager-webhook"
+
+cainjector:
+  image:
+    repository: "{{ dsc.general.registry }}/cert-manager-cainjector"
+
+acmesolver:
+  image:
+    repository: "{{ dsc.general.registry }}/cert-manager-acmesolver"
+
+startupapicheck:
+  image:
+    repository: "{{ dsc.general.registry }}/cert-manager-startupapicheck"
+{% endif %}
