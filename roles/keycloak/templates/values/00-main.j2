@@ -1,5 +1,10 @@
 image:
+{% if  dsc.general.registry == "" %}
   registry: docker.io
+{% endif %}
+{% if dsc.general.registry != "" %}
+  registry: "{{ dsc.general.registry }}"
+{% endif %}
   pullPolicy: "IfNotPresent"
 
 auth:

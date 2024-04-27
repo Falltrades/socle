@@ -4,7 +4,12 @@ OpenShift:
 
 image:
   pullPolicy: IfNotPresent
+{% if  dsc.general.registry == "" %}
   repository: docker.io/sonarqube
+{% endif %}
+{% if dsc.general.registry != "" %}
+  repository: "{{ dsc.general.registry }}/sonarqube"
+{% endif %}
 
 securityContext:
   fsGroup: null

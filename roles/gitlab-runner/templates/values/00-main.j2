@@ -1,4 +1,9 @@
 
+{% if dsc.general.registry != "" %}
+image:
+  registry: "{{ dsc.general.registry }}"
+{% endif %}
+
 replicas: 1
 
 ## How many old ReplicaSets for this Deployment you want to retain

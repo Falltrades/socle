@@ -18,7 +18,12 @@ spec:
     spec:
       containers:
         - name: nexus
+{% if  dsc.general.registry == "" %}
           image: sonatype/nexus3:{{ dsc.nexus.imageTag }}
+{% endif %}
+{% if dsc.general.registry != "" %}
+          image: "{{ dsc.general.registry }}/sonatype/nexus3:{{ dsc.nexus.imageTag }}"
+{% endif %}
           imagePullPolicy: "IfNotPresent"
           ports:
             - containerPort: 8081  # Exposes container port

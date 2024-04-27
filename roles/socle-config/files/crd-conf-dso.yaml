@@ -21,6 +21,16 @@ spec:
           properties:
             spec:
               properties:
+                general:
+                  description: Generals options based on the cluster.
+                  items:
+                    properties:
+                      registry:
+                        default: ""
+                        description: Specifies the internal registry to use. Empty by
+                          defaulti so public registry is used.
+                        type: string
+                    type: object
                 additionalsCA:
                   description: Additional CAs to inject into tools; the resources should
                     be available in all namespaces
@@ -193,10 +203,6 @@ spec:
                       type: string
                     chartVersion:
                       description: GitLab chart version (e.g., "6.11.10").
-                      type: string
-                    pvcGitalySize:
-                      description: Size for Gitaly persistent volume.
-                      default: 50Gi
                       type: string
                     values:
                       description: |
@@ -600,10 +606,6 @@ spec:
                       type: string
                     chartVersion:
                       description: Hashicorp Vault helm chart version (e.g., "0.25.0").
-                      type: string
-                    pvcSize:
-                      description: Size for Vault persistent volume.
-                      default: 23Gi
                       type: string
                     values:
                       description: |
