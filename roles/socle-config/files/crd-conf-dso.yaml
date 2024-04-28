@@ -23,14 +23,13 @@ spec:
               properties:
                 general:
                   description: Generals options based on the cluster.
-                  items:
-                    properties:
-                      registry:
-                        default: ""
-                        description: Specifies the internal registry to use. Empty by
-                          defaulti so public registry is used.
-                        type: string
-                    type: object
+                  properties:
+                    registry:
+                      default: ""
+                      description: Specifies the internal registry to use. Empty by
+                        defaulti so public registry is used.
+                      type: string
+                  type: object
                 additionalsCA:
                   description: Additional CAs to inject into tools; the resources should
                     be available in all namespaces
