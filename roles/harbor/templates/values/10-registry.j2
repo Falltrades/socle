@@ -1,152 +1,87 @@
-expose:
-  imagePullPolicy: IfNotPresent
-  type: ingress
-  ingress:
-    className: {{ dsc.ingress.className | default('') }}
-    hosts:
-      core: {{ harbor_domain }}
-      notary: {{ dsc.harbor.subDomain }}-notary{{ root_domain }}
-    notary:
-      annotations:
-{% for key, val in dsc.ingress.annotations.items() %}
-        {{ key }}: {{ val }}
-{% endfor %}
-      labels:
-{% for key, val in dsc.ingress.labels.items() %}
-        {{ key }}: {{ val }}
-{% endfor %}
-    harbor:
-      annotations:
-{% for key, val in dsc.ingress.annotations.items() %}
-        {{ key }}: {{ val }}
-{% endfor %}
-      labels:
-{% for key, val in dsc.ingress.labels.items() %}
-        {{ key }}: {{ val }}
-{% endfor %}
-externalURL: https://{{ harbor_domain }}
-persistence:
-  enabled: true
-  resourcePolicy: keep
-  persistentVolumeClaim:
-    registry:
-      size: "{{ dsc.harbor.pvcRegistrySize }}"
-    jobservice:
-      jobLog:
-        size: 5Gi
-    database:
-      size: 10Gi
-    redis:
-      size: 5Gi
-    trivy:
-      size: 10Gi
-harborAdminPassword: "{{ dsc.harbor.adminPassword }}"
+{% if dsc.general.registry is not defined or dsc.general.registry is defined and dsc.general.registry == "" %}
 nginx:
-  replicas: 2
-  serviceAccountName: harbor-sa
   image:
-{% if dsc.general.registry is not defined or dsc.general.registry is defined and dsc.general.registry == "" %}
     repository: docker.io/goharbor/nginx-photon
-{% endif %}
-{% if dsc.general.registry %}
-    repository: "{{ dsc.general.registry }}/goharbor/nginx-photon" 
-{% endif %}
+
 portal:
-  replicas: 2
-  serviceAccountName: harbor-sa
   image:
-{% if dsc.general.registry is not defined or dsc.general.registry is defined and dsc.general.registry == "" %}
     repository: docker.io/goharbor/harbor-portal
-{% endif %}
-{% if dsc.general.registry %}
-    repository: "{{ dsc.general.registry }}/goharbor/harbor-portal" 
-{% endif %}
+
 core:
-  replicas: 3
-  serviceAccountName: harbor-sa
   image:
-{% if dsc.general.registry is not defined or dsc.general.registry is defined and dsc.general.registry == "" %}
     repository: docker.io/goharbor/harbor-core
-{% endif %}
-{% if dsc.general.registry %}
-    repository: "{{ dsc.general.registry }}/goharbor/harbor-core" 
-{% endif %}
+
 jobservice:
-  replicas: 2
-  serviceAccountName: harbor-sa
   image:
-{% if dsc.general.registry is not defined or dsc.general.registry is defined and dsc.general.registry == "" %}
     repository: docker.io/goharbor/harbor-jobservice
-{% endif %}
-{% if dsc.general.registry %}
-    repository: "{{ dsc.general.registry }}/goharbor/harbor-jobservice" 
-{% endif %}
+
 registry:
-  replicas: 3
-  serviceAccountName: harbor-sa
   registry:
     image:
-{% if dsc.general.registry is not defined or dsc.general.registry is defined and dsc.general.registry == "" %}
       repository: docker.io/goharbor/registry-photon
-{% endif %}
-{% if dsc.general.registry %}
-      repository: "{{ dsc.general.registry }}/goharbor/registry-photon" 
-{% endif %}
   controller:
     image:
-{% if dsc.general.registry is not defined or dsc.general.registry is defined and dsc.general.registry == "" %}
       repository: docker.io/goharbor/harbor-registryctl
-{% endif %}
-{% if dsc.general.registry %}
-      repository: "{{ dsc.general.registry }}/goharbor/harbor-registryctl" 
-{% endif %}
+
 trivy:
-  replicas: 2
-  serviceAccountName: harbor-sa
   image:
-{% if dsc.general.registry is not defined or dsc.general.registry is defined and dsc.general.registry == "" %}
     repository: docker.io/goharbor/trivy-adapter-photon
-{% endif %}
-{% if dsc.general.registry %}
-    repository: "{{ dsc.general.registry }}/goharbor/trivy-adapter-photon" 
-{% endif %}
+
 database:
   internal:
-    serviceAccountName: harbor-sa
     image:
-{% if dsc.general.registry is not defined or dsc.general.registry is defined and dsc.general.registry == "" %}
       repository: docker.io/goharbor/harbor-db
-{% endif %}
-{% if dsc.general.registry %}
-      repository: "{{ dsc.general.registry }}/goharbor/harbor-db" 
-{% endif %}
-{% if dsc.global.backup.type == 'velero' %}
-  podAnnotations:
-    pre.hook.backup.velero.io/command: '["/bin/bash", "-c", "pg_dump -Fc  -U postgres -d registry  > /var/lib/postgresql/data/app.dump"]'
-{% endif %}
+
 redis:
   internal:
-    serviceAccountName: harbor-sa
     image:
-{% if dsc.general.registry is not defined or dsc.general.registry is defined and dsc.general.registry == "" %}
       repository: docker.io/goharbor/redis-photon
-{% endif %}
-{% if dsc.general.registry %}
-      repository: "{{ dsc.general.registry }}/goharbor/redis-photon" 
-{% endif %}
+
 exporter:
-  replicas: 1
   image:
-{% if dsc.general.registry is not defined or dsc.general.registry is defined and dsc.general.registry == "" %}
     repository: docker.io/goharbor/harbor-exporter
 {% endif %}
+
 {% if dsc.general.registry %}
+nginx:
+  image:
+    repository: "{{ dsc.general.registry }}/goharbor/nginx-photon" 
+
+portal:
+  image:
+    repository: "{{ dsc.general.registry }}/goharbor/harbor-portal" 
+
+core:
+  image:
+    repository: "{{ dsc.general.registry }}/goharbor/harbor-core" 
+
+jobservice:
+  image:
+    repository: "{{ dsc.general.registry }}/goharbor/harbor-jobservice" 
+
+registry:
+  registry:
+    image:
+      repository: "{{ dsc.general.registry }}/goharbor/registry-photon" 
+  controller:
+    image:
+      repository: "{{ dsc.general.registry }}/goharbor/harbor-registryctl" 
+
+trivy:
+  image:
+    repository: "{{ dsc.general.registry }}/goharbor/trivy-adapter-photon" 
+
+database:
+  internal:
+    image:
+      repository: "{{ dsc.general.registry }}/goharbor/harbor-db" 
+
+redis:
+  internal:
+    image:
+      repository: "{{ dsc.general.registry }}/goharbor/redis-photon" 
+
+exporter:
+  image:
     repository: "{{ dsc.general.registry }}/goharbor/harbor-exporter" 
-{% endif %}
-  serviceAccountName: harbor-sa
-{% if dsc.global.metrics.enabled %}
-metrics:
-  enabled: true
-  serviceMonitor:
-    enabled: true
 {% endif %}
