@@ -33,10 +33,6 @@ gitlab:
       serviceMonitor:
         enabled: true
 {% endif %}
-{% if dsc.general.registry %}
-    image:
-      repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitaly"
-{% endif %}
     persistence:
       size: {{ dsc.gitlab.pvcGitalySize }}
   gitlab-exporter:
@@ -44,13 +40,6 @@ gitlab:
     metrics:
       serviceMonitor:
         enabled: true
-{% endif %}
-{% if dsc.general.registry %}
-    image:
-      repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitlab-exporter"
-  gitlab-shell:
-    image:
-      repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitlab-shell"
 {% endif %}
 
   kas:
@@ -60,26 +49,10 @@ gitlab:
       serviceMonitor:
         enabled: true
 {% endif %}
-{% if dsc.general.registry %}
-    image:
-      repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitlab-kas"
-  toolbox:
-    image:
-      repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitlab-toolbox-ee"
-{% endif %}
-    
 
 global:
   registry:
     enabled: false
-{% if dsc.general.registry %}
-  kubectl:
-    image:
-      repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/kubectl"
-  gitlabBase:
-    image:
-      repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitlab-base"
-{% endif %}
   certificates:
     customCAs:
       - configMap: openshift-service-ca.crt
@@ -94,10 +67,6 @@ global:
 {% if dsc.exposedCA.type != 'none' %}
       - secret: exposed-ca
 {% endif %}
-{% if dsc.general.registry %}
-    image:
-      repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/certificates"
-{% endif %}
   hosts:
     domain: {{ dsc.global.rootDomain[1:] }}
     registry:
@@ -109,32 +78,6 @@ global:
 {% if gitlab_domain %}
     gitlab:
       name: {{ gitlab_domain }}
-{% endif %}
-{% if dsc.general.registry %}
-  enterpriseImages:
-    migrations:
-      repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitlab-toolbox-ee"
-    sidekiq:
-      repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitlab-sidekiq-ee"
-    toolbox:
-      repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitlab-toolbox-ee"
-    webservice:
-      repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitlab-webservice-ee"
-    workhorse:
-      repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitlab-workhorse-ee"
-    geo-logcursor:
-      repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitlab-geo-logcursor"
-  communityImages:
-    migrations:
-      repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitlab-toolbox-ce"
-    sidekiq:
-      repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitlab-sidekiq-ce"
-    toolbox:
-      repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitlab-toolbox-ce"
-    webservice:
-      repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitlab-webservice-ce"
-    workhorse:
-      repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitlab-workhorse-ce"
 {% endif %}
 
   appConfig:
@@ -153,32 +96,6 @@ global:
       autoLinkUser: ["openid_connect"]
       providers:
         - secret: openid-connect
-
-{% if dsc.general.registry %}
-shared-secrets:
-  selfsign:
-    image:
-      repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/cfssl-self-sign"
-
-minio:
-  image: "{{ dsc.general.registry }}/minio"
-  minioMc:
-    image: "{{ dsc.general.registry }}/mc"
-
-postgresql:
-  image:
-    registry: "{{ dsc.general.registry }}"
-  metrics:
-    image:
-      registry: "{{ dsc.general.registry }}"
-
-redis:
-  image:
-    registry: "{{ dsc.general.registry }}"
-  metrics:
-    image:
-      registry: "{{ dsc.general.registry }}"
-{% endif %}
 
 prometheus:
   install: false

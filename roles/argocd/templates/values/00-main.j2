@@ -1,8 +1,3 @@
-{% if dsc.general.registry %}
-image:
-  registry: "{{ dsc.general.registry }}"
-{% endif %}
-
 config:
 {% if dsc.argocd.admin.enabled %}
   secret:
@@ -29,10 +24,6 @@ config:
     policy.default: role:nada
     admin.enabled: "false"
 redis:
-{% if dsc.general.registry %}
-  image:
-    registry: "{{ dsc.general.registry }}"
-{% endif %}
   architecture: replication
   master:
     podSecurityContext:

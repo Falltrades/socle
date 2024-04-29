@@ -1,0 +1,13 @@
+{% if dsc.general.registry %}
+server:
+  container:
+    image: "{{ dsc.general.registry }}/cloud-pi-native/console/server:{{ dsc.console.release }}"
+
+client:
+  container:
+    image: "{{ dsc.general.registry }}/cloud-pi-native/console/client:{{ dsc.console.release }}"
+
+postgres:
+  container:
+    image: "{{ dsc.general.registry }}/postgres:15.3"
+{% endif %}

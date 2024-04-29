@@ -1,0 +1,8 @@
+{% if dsc.general.registry %}
+image:
+  registry: "{{ dsc.general.registry }}"
+
+redis:
+  image:
+    registry: "{{ dsc.general.registry }}"
+{% endif %}
