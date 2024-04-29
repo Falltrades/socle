@@ -1,12 +1,3 @@
-image:
-{% if dsc.general.registry is not defined or dsc.general.registry is defined and dsc.general.registry == "" %}
-  registry: docker.io
-{% endif %}
-{% if dsc.general.registry %}
-  registry: "{{ dsc.general.registry }}"
-{% endif %}
-  pullPolicy: "IfNotPresent"
-
 auth:
   adminUser: "admin"
   existingSecret: "keycloak"
