@@ -25,9 +25,7 @@ spec:
                   description: Generals options based on the cluster.
                   properties:
                     registry:
-                      default: ""
-                      description: Specifies the internal registry to use. Empty by
-                        defaulti so public registry is used.
+                      description: Specifies the internal registry to use.
                       type: string
                   type: object
                 additionalsCA:

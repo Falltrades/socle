@@ -5,7 +5,7 @@ ingress:
   annotations: {{ dsc.ingress.annotations }}
   labels: {{ dsc.ingress.labels }}
 
-{% if dsc.general.registry != "" %}
+{% if dsc.general.registry %}
 server:
   container:
     image: "{{ dsc.general.registry }}/cloud-pi-native/console/server:{{ dsc.console.release }}"
@@ -17,7 +17,7 @@ client:
 
 postgres:
   container:
-{% if dsc.general.registry != "" %}
+{% if dsc.general.registry %}
     image: "{{ dsc.general.registry }}/postgres:15.3"
 {% endif %}
     db: dso-console-db

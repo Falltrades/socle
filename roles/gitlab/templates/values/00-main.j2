@@ -33,7 +33,7 @@ gitlab:
       serviceMonitor:
         enabled: true
 {% endif %}
-{% if dsc.general.registry != "" %}
+{% if dsc.general.registry %}
     image:
       repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitaly"
 {% endif %}
@@ -45,7 +45,7 @@ gitlab:
       serviceMonitor:
         enabled: true
 {% endif %}
-{% if dsc.general.registry != "" %}
+{% if dsc.general.registry %}
     image:
       repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitlab-exporter"
   gitlab-shell:
@@ -60,7 +60,7 @@ gitlab:
       serviceMonitor:
         enabled: true
 {% endif %}
-{% if dsc.general.registry != "" %}
+{% if dsc.general.registry %}
     image:
       repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitlab-kas"
   toolbox:
@@ -72,7 +72,7 @@ gitlab:
 global:
   registry:
     enabled: false
-{% if dsc.general.registry != "" %}
+{% if dsc.general.registry %}
   kubectl:
     image:
       repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/kubectl"
@@ -94,7 +94,7 @@ global:
 {% if dsc.exposedCA.type != 'none' %}
       - secret: exposed-ca
 {% endif %}
-{% if dsc.general.registry != "" %}
+{% if dsc.general.registry %}
     image:
       repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/certificates"
 {% endif %}
@@ -110,7 +110,7 @@ global:
     gitlab:
       name: {{ gitlab_domain }}
 {% endif %}
-{% if dsc.general.registry != "" %}
+{% if dsc.general.registry %}
   enterpriseImages:
     migrations:
       repository: "{{ dsc.general.registry }}/gitlab-org/build/cng/gitlab-toolbox-ee"
@@ -154,7 +154,7 @@ global:
       providers:
         - secret: openid-connect
 
-{% if dsc.general.registry != "" %}
+{% if dsc.general.registry %}
 shared-secrets:
   selfsign:
     image:

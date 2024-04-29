@@ -15,11 +15,11 @@ spec:
 
   # Parameters and pg_hba configuration will be append
   # to the default ones to make the cluster work
-{% if dsc.general.registry != "" %}
+{% if dsc.general.registry %}
   imageName: "{{ dsc.general.registry }}/cloudnative-pg/postgresql:16.1"
 {% endif %}
   postgresql:
-{% if dsc.general.registry != "" %}
+{% if dsc.general.registry %}
     image: "{{ dsc.general.registry }}/cloudnative-pg/postgresql:16.1"
 {% endif %}
     parameters:

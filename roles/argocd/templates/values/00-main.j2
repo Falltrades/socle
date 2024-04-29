@@ -1,4 +1,4 @@
-{% if dsc.general.registry != "" %}
+{% if dsc.general.registry %}
 image:
   registry: "{{ dsc.general.registry }}"
 {% endif %}
@@ -29,7 +29,7 @@ config:
     policy.default: role:nada
     admin.enabled: "false"
 redis:
-{% if dsc.general.registry != "" %}
+{% if dsc.general.registry %}
   image:
     registry: "{{ dsc.general.registry }}"
 {% endif %}
