@@ -1,0 +1,7 @@
+image:
+  pullPolicy: IfNotPresent
+{% if dsc.general.registry %}
+  repository: "{{ dsc.general.registry }}/sonarqube"
+{% else %}
+  repository: docker.io/sonarqube
+{% endif %}

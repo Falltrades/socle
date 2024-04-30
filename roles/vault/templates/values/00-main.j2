@@ -9,22 +9,7 @@ injector:
   metrics:
     enabled: true
 {% endif %}
-  image:
-{% if dsc.general.registry is not defined or dsc.general.registry is defined and dsc.general.registry == "" %}
-    repository: docker.io/hashicorp/vault-k8s
-  agentImage:
-    repository: docker.io/hashicorp/vault
-{% endif %}
-{% if dsc.general.registry %}
-    repository: "{{ dsc.general.registry }}/hashicorp/vault-k8s"
-  agentImage:
-    repository: "{{ dsc.general.registry }}/hashicorp/vault"
-{% endif %}
 server:
-{% if dsc.general.registry %}
-  image:
-    repository: "{{ dsc.general.registry }}/hashicorp/vault"
-{% endif %}
   route:
     enabled: false
   ha:
@@ -56,25 +41,6 @@ server:
   dataStorage:
     enable: true
     size: {{ dsc.vault.pvcSize }}
-  image:
-{% if dsc.general.registry is not defined or dsc.general.registry is defined and dsc.general.registry == "" %}
-    repository: docker.io/hashicorp/vault
-csi:
-  image:
-    repository: docker.io/hashicorp/vault-csi-provider
-  agent:
-    image:
-      repository: docker.io/hashicorp/vault
-{% endif %}
-{% if dsc.general.registry %}
-    repository: "{{ dsc.general.registry }}/hashicorp/vault"
-csi:
-  image:
-    repository: "{{ dsc.general.registry }}/hashicorp/vault-csi-provider"
-  agent:
-    image:
-      repository: "{{ dsc.general.registry }}/hashicorp/vault"
-{% endif %}
 {% if dsc.global.metrics.enabled %}
 serverTelemetry:
   serviceMonitor:

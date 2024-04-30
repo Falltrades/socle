@@ -2,15 +2,6 @@
 OpenShift:
   enabled: true
 
-image:
-  pullPolicy: IfNotPresent
-{% if dsc.general.registry is not defined or dsc.general.registry is defined and dsc.general.registry == "" %}
-  repository: docker.io/sonarqube
-{% endif %}
-{% if dsc.general.registry %}
-  repository: "{{ dsc.general.registry }}/sonarqube"
-{% endif %}
-
 securityContext:
   fsGroup: null
 
