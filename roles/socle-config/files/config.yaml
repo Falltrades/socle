@@ -5,6 +5,8 @@ apiVersion: cloud-pi-native.fr/v1alpha
 metadata:
   name: conf-dso
 spec:
+  general:
+    registry: ""
   argocd:
     namespace: dso-argocd
     subDomain: argocd

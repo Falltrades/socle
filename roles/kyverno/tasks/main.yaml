@@ -34,7 +34,6 @@
         create_namespace: true
         values: "{{ kyverno_values }}"
 
-
 - name: Wait Kyverno service endpoint to be available
   kubernetes.core.k8s_info:
     kind: Endpoints
