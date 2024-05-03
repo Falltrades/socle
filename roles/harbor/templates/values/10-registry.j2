@@ -40,46 +40,4 @@ redis:
 exporter:
   image:
     repository: "{{ dsc.general.registry }}/goharbor/harbor-exporter" 
-{% else %}
-nginx:
-  image:
-    repository: docker.io/goharbor/nginx-photon
-
-portal:
-  image:
-    repository: docker.io/goharbor/harbor-portal
-
-core:
-  image:
-    repository: docker.io/goharbor/harbor-core
-
-jobservice:
-  image:
-    repository: docker.io/goharbor/harbor-jobservice
-
-registry:
-  registry:
-    image:
-      repository: docker.io/goharbor/registry-photon
-  controller:
-    image:
-      repository: docker.io/goharbor/harbor-registryctl
-
-trivy:
-  image:
-    repository: docker.io/goharbor/trivy-adapter-photon
-
-database:
-  internal:
-    image:
-      repository: docker.io/goharbor/harbor-db
-
-redis:
-  internal:
-    image:
-      repository: docker.io/goharbor/redis-photon
-
-exporter:
-  image:
-    repository: docker.io/goharbor/harbor-exporter
 {% endif %}

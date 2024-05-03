@@ -2,6 +2,10 @@
 OpenShift:
   enabled: true
 
+image:
+  pullPolicy: IfNotPresent
+  repository: docker.io/sonarqube
+
 securityContext:
   fsGroup: null
 

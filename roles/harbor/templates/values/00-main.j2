@@ -44,24 +44,42 @@ harborAdminPassword: "{{ dsc.harbor.adminPassword }}"
 nginx:
   replicas: 2
   serviceAccountName: harbor-sa
+  image:
+    repository: docker.io/goharbor/nginx-photon
 portal:
   replicas: 2
   serviceAccountName: harbor-sa
+  image:
+    repository: docker.io/goharbor/harbor-portal
 core:
   replicas: 3
   serviceAccountName: harbor-sa
+  image:
+    repository: docker.io/goharbor/harbor-core
 jobservice:
   replicas: 2
   serviceAccountName: harbor-sa
+  image:
+    repository: docker.io/goharbor/harbor-jobservice
 registry:
   replicas: 3
   serviceAccountName: harbor-sa
+  registry:
+    image:
+      repository: docker.io/goharbor/registry-photon
+  controller:
+    image:
+      repository: docker.io/goharbor/harbor-registryctl
 trivy:
   replicas: 2
   serviceAccountName: harbor-sa
+  image:
+    repository: docker.io/goharbor/trivy-adapter-photon
 database:
   internal:
     serviceAccountName: harbor-sa
+    image:
+      repository: docker.io/goharbor/harbor-db
 {% if dsc.global.backup.type == 'velero' %}
   podAnnotations:
     pre.hook.backup.velero.io/command: '["/bin/bash", "-c", "pg_dump -Fc  -U postgres -d registry  > /var/lib/postgresql/data/app.dump"]'
@@ -69,8 +87,12 @@ database:
 redis:
   internal:
     serviceAccountName: harbor-sa
+    image:
+      repository: docker.io/goharbor/redis-photon
 exporter:
   replicas: 1
+  image:
+    repository: docker.io/goharbor/harbor-exporter
   serviceAccountName: harbor-sa
 {% if dsc.global.metrics.enabled %}
 metrics:

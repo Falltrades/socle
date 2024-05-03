@@ -1,6 +1,6 @@
+{% if dsc.general.registry %}
 injector:
   image:
-{% if dsc.general.registry %}
     repository: "{{ dsc.general.registry }}/hashicorp/vault-k8s"
   agentImage:
     repository: "{{ dsc.general.registry }}/hashicorp/vault"
@@ -15,19 +15,4 @@ csi:
   agent:
     image:
       repository: "{{ dsc.general.registry }}/hashicorp/vault"
-{% else %}
-    repository: docker.io/hashicorp/vault-k8s
-  agentImage:
-    repository: docker.io/hashicorp/vault
-
-server:
-  image:
-    repository: docker.io/hashicorp/vault
-
-csi:
-  image:
-    repository: docker.io/hashicorp/vault-csi-provider
-  agent:
-    image:
-      repository: docker.io/hashicorp/vault
 {% endif %}

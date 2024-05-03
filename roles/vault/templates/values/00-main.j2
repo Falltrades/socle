@@ -9,6 +9,10 @@ injector:
   metrics:
     enabled: true
 {% endif %}
+  image:
+    repository: docker.io/hashicorp/vault-k8s
+  agentImage:
+    repository: docker.io/hashicorp/vault
 server:
   route:
     enabled: false
@@ -41,6 +45,14 @@ server:
   dataStorage:
     enable: true
     size: {{ dsc.vault.pvcSize }}
+  image:
+    repository: docker.io/hashicorp/vault
+csi:
+  image:
+    repository: docker.io/hashicorp/vault-csi-provider
+  agent:
+    image:
+      repository: docker.io/hashicorp/vault
 {% if dsc.global.metrics.enabled %}
 serverTelemetry:
   serviceMonitor:

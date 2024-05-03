@@ -1,8 +1,4 @@
-image:
 {% if dsc.general.registry %}
+image:
   registry: "{{ dsc.general.registry }}"
-{% else %}
-  registry: docker.io
 {% endif %}
-  pullPolicy: "IfNotPresent"
-
